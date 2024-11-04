@@ -1,0 +1,43 @@
+celltype	abbreviation	order	Color
+active hair follicle stem cell	aHFSC	Active_HFSC	#FFFF00
+arrector pili	AP	Arrector_pili	#00A087FF
+dermal papilla	DP	Dermal_papilla	#E31A1C
+dermal sheath	DS	Dermal_sheath	#D7E3FF
+eccrine gland	EG	Eccrine_glands	#A1CAF1
+eccrine gland duct	EGD	Eccrine_glands_duct	#C2B280
+erythrocyte	ERY	Erythrocyte	#999999
+fibroblast	FB	Fibroblasts	#A30059
+infundibular	INF	HF_Infundibular	#FFF300
+inner root sheath	IRS	HF_IRS	#F38400
+human hair follicle dermal stem cell	hHFDSC	hfDSC	#00FF00
+interfollicular epidermis basal 1	IFEB1	IFE_basal_1	#A020F0
+interfollicular epidermis basal 2	IFEB2	IFE_basal_2	#509DEA
+interfollicular epidermis granular	IFEG	IFE_granular	#FF2F80
+interfollicular epidermis spinous	IFESP	IFE_Spinous	#FE4945
+interfollicular epidermis suprabasal	IFESU	IFE_Suprabasal	#FFE4E1
+innate lymphoid cell	ILC	Innate_lymphoid_cell	#E25822
+inner root sheath cuticle	IRSC	IRS_cuticle	#00C2A0
+isthmus	IST	Isthmus	#4FC601
+langerhans	LGS	Langerhans	#FFAA92
+lymphatic endothelial	LENDO	Lymphatic_endothelial	#FDC086
+macrophage	MACRO	Macrophage	#FF4A9C
+mast cell	MAST	Mast_cells	#E68FAC
+medulla cortex cuticle	MCC	Medulla_Cortex_Cuticle	#F781BF
+melanocyte stem cell	MELASC	Melanocyte_stem_cells	#8FB0FF
+melanocyte	MELA	Melanocytes	#63FFAC
+outter root sheath suprabasal	ORSS	ORS_Suprabasal	#41AB5D
+outter root sheath basal	ORSB	ORS_basal	#1CE6FF
+pericyte	PCT	Pericyte	#0000A6
+proliferating keratinocyte 1	PKC1	Proliferating_KC_1	#FFFF99
+proliferating keratinocyte 2	PKC2	Proliferating_KC_2	#F6A600
+quiescent hair follicle stem cell	qHFSC	Quiescent_HFSC	#FF1493
+deep quiescent hair follicle stem cell	dqHFSC	dqHFSC	#bc321a
+sebaceous gland	SG	Sebaceous_glands	#FF90C9
+T cell	TC	T_cells	#3B5DFF
+transit amplifying cell 1	TAC1	TAC_1	#FF34FF
+transit amplifying cell 2	TAC2	TAC_2	#1E90FF
+schwann cell	SW	Schwann	#F99379
+vascular endothelium 1	VENDO1	Vascular_endothelium_1	#74C476
+vascular endothelium 2	VENDO2	Vascular_endothelium_2	#7B4F4B
+vascular endothelium 3	VENDO3	Vascular_endothelium_3	#DCD300
+unknown	unknown	unknown	#363636
