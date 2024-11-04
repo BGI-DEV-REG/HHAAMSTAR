@@ -84,7 +84,7 @@ data.var_names_make_unique()
 sc.pp.pca(data,n_comps=30)
 
 ## Consider Spatial distance Clustering
-def spatially_constrained_cluster(adata, e_neigh=30, s_neigh=6, binsize=None,resolution = 1):
+def spatially_constrained_cluster(adata, e_neigh=30, s_neigh=6, binsize=None,resolution = 5):
     sc.pp.neighbors(adata, n_neighbors=e_neigh)
     sq.gr.spatial_neighbors(adata, n_neighs=s_neigh)
     conn = adata.obsp['connectivities'].copy()
