@@ -11,9 +11,9 @@ source('../data/figure1/code/seurat_helper.r')
 
 # removing contamination RNAs
 
-data_path='../data/figure1/raw_data/'
-output_path='../data/figure1/SoupX/'
-data_sample = read.csv('../data/figure1/Figure1B_scRNA-raw_data_info.csv',row.names=1)
+data_path='../data/figure1/scRNA-seq/raw_data/'
+output_path='../data/figure1/scRNA-seq/SoupX/'
+data_sample = read.csv('../data/figure1/scRNA-seq/Figure1B_scRNA-raw_data_info.csv',row.names=1)
 data_names = data_sample$data_names
 sample_names = data_sample$sample_names
 
@@ -85,15 +85,15 @@ for (i in 1:length(sample_names)){
     # doublets
     seurat.list[[i]] <- runscDblFinder(seurat.list[[i]], assay='RNA')
     # save result
-    saveRDS(seurat.list[[i]], paste0('../data/figure1/QC/',sample_names[i],'.rds'))
+    saveRDS(seurat.list[[i]], paste0('../data/figure1/scRNA-seq/QC/',sample_names[i],'.rds'))
 }
 
 # remove outliers and doublets
 
-dir='../data/figure1/QC/'
+dir='../data/figure1/scRNA-seq/QC/'
 
 skin=loadRDSData(dir, sample_names, merge=TRUE)
-saveRDS(skin, '../data/figure1/HF_RNA_HF_RNA_raw.rds')
+saveRDS(skin, '../data/figure1/scRNA-seq/HF_RNA_HF_RNA_raw.rds')
 
 
 skin = subset(x = skin, subset = nCount_RNA > 0)
@@ -109,10 +109,10 @@ skin <- subset(skin, scDblFinder.class=='singlet')
 # get blacklist genes
 blacklist.genes=GetBlackListGenes(skin, MT=TRUE, Ribo=TRUE, Cellcycle=FALSE, Sex=FALSE)
 
-saveRDS(skin,'../data/figure1/HF_RNA_postQC_merge.rds')
+saveRDS(skin,'../data/figure1/scRNA-seq/HF_RNA_postQC_merge.rds')
 
 # load merge object post quality control
-obj = readRDS('../data/figure1/HF_RNA_postQC_merge.rds')
+obj = readRDS('../data/figure1/scRNA-seq/HF_RNA_postQC_merge.rds')
 
 # Integration
 
@@ -146,7 +146,7 @@ HF.combined <- RunPCA(HF.combined, npcs = 30, verbose = FALSE, reduction.name = 
 HF.combined <- RunUMAP(HF.combined, reduction = "inter_pca", dims = 1:30)
 HF.combined <- FindNeighbors(HF.combined, reduction = "inter_pca", dims = 1:30)
 HF.combined <- FindClusters(HF.combined)
-saveRDS(HF.combined, file = '../data/figure1/HF_RNA_postQC_rpca.rds')
+saveRDS(HF.combined, file = '../data/figure1/scRNA-seq/HF_RNA_postQC_rpca.rds')
 
 # Plot
 
@@ -159,7 +159,7 @@ age.color = c('#3c1686', '#7696ca', '#99c9ec', '#5ea999', '#2e7737')
 sample.color = c('#99CCFF', '#846DB1', '#F3DCBB')
 names(sample.color) = c('HB', 'AB', 'AF')
 
-anno = read.csv('../data/figure1/annotation.csv')
+anno = read.csv('../data/figure1/scRNA-seq/annotation.csv')
 HF.combined$celltype_1 = anno[match(HF.combined$seurat_clusters, anno$seurat_clusters),]$celltype
 p1 = DimPlot(HF.combined, group.by = 'celltype_1', pt.size=0.01, raster = F, cols = colors, shuffle = T)+NoLegend()+
     theme_void() + 
@@ -246,4 +246,4 @@ p4 <- ggplot(Cellnum, aes(x = sample, y = Freq, group = sample_type, fill = samp
         legend.background = element_rect(fill = "black"),
         legend.text = element_text(color = "white",size = 12))
 
-saveRDS(HF.combined, file = '../data/figure1/HF_RNA_postQC_rpca.rds')
+saveRDS(HF.combined, file = '../data/figure1/scRNA-seq/HF_RNA_postQC_rpca.rds')
