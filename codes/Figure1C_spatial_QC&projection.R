@@ -68,8 +68,6 @@ ad$write_h5ad(file.path(output_path, paste0(id, "_SCT.h5ad")))
 
 
 # RCTD
-##传参（将时空组数据传进来）
-
 library(data.table)
 library(spacexr)
 library(Seurat)
