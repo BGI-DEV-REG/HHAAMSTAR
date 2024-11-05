@@ -6,7 +6,7 @@ This repository contains scripts used in the analysis of the manuscript: "**Mult
 
 
 ## Accessions
-CNSA-Project: https://db.cngb.org/search/project/CNP0006019
+CNSA-Project: [CNP0006019](https://db.cngb.org/cnsa/)
 
 Processed data can be explored and downloaded in our database [HHAAMSTAR](https://db.cngb.org/stomics/hhaamstar/).
 
