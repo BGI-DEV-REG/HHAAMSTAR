@@ -18,7 +18,9 @@ If you use content from this database in your research or project, please cite t
 (Article Link)
 
 ## Cell segmentation workflow
-We followed the method of [Wei et al.](https://www.science.org/doi/10.1126/science.abp9444), the tools can be explored in https://github.com/BGI-DEV-REG/ARTISTA/tree/main/code/RYtools/Tools 
+We followed the method of cell segmentation described by [Wei et al.](https://www.science.org/doi/10.1126/science.abp9444). 
+
+The tools used in this study can be explored at https://github.com/BGI-DEV-REG/ARTISTA/tree/main/code/RYtools/Tools 
 
 
 ## Contact
