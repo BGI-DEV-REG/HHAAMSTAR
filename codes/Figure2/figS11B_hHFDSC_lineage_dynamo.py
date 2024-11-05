@@ -1,11 +1,11 @@
-import scanpy as sc 
+import scanpy as sc ###
 import dynamo as dyn
 import pandas as pd 
 import numpy as np 
 import seaborn as sns 
 import matplotlib.pyplot as plt 
 from scipy.sparse import csr_matrix
-import squidpy as sq 
+import squidpy as sq ###
 import sys
 import time
 import os
@@ -16,7 +16,7 @@ id = sys.argv[1]  # hair follicle selection id
 sample = id.split('_SCT_selection')[0]
 workpath="../data/figure2/Spatial/04.RCTD/dynamo/"+sample+'/'+id #working path
 inh5ad=id+"_all_assays.h5ad" #input path of h5ad file with annotation
-outpath="../data/figure2/dynamo/"+sample+'/'+id+"/HFSC"
+outpath="../data/figure2/dynamo/"+sample+'/'+id+"/HFDSC"
 root_state=0 #"cell_in_HFSC" - 0,   "cell_in_HFDSC" - 1
 root_state = int(root_state)
 
@@ -43,9 +43,10 @@ co_all = dict(zip(color_df['order'], color_df['Color']))
 
 
 # subset cell types
-cell_in_HFSC = ['Quiescent_HFSC',"Active_HFSC",'ORS_Suprabasal','ORS_basal',"TAC_1","HF_IRS","TAC_2","Medulla_Cortex_Cuticle","IRS_cuticle"]
-cell_in_HFDSC = ["hfDSC","Dermal_Papilla","Dermal_sheath"]
-cell_list = [cell_in_HFSC,cell_in_HFDSC]
+cell_in_HFSC = ["Active_HFSC",'Quiescent_HFSC','ORS_Suprabasal','ORS',"TAC_2","TAC_3","Medulla_Cortex_Cuticle","IRS_cuticle","HF_IRS"]
+cell_in_HFDSC = ["hfDSC","Dermal_papilla","Dermal_sheath"]
+cell_in_Epidermis = ["HF_basal","IFE_basal","IFE_granular","IFE_Spinous","IFE_Suprabasal"]
+cell_list = [cell_in_HFSC,cell_in_HFDSC,cell_in_Epidermis]
 
 anndata = anndata[anndata.obs['celltype'].isin(cell_list[root_state])]
 root_cell = cell_list[root_state][0]
@@ -57,6 +58,7 @@ else:
     print("file exist")
 
 os.chdir(outpath)
+
 
 # QC
 sc.pp.calculate_qc_metrics(anndata, expr_type='unspliced', layer = "unspliced", inplace = True)
@@ -72,14 +74,14 @@ plt.savefig('violin.total.png')
 print("qc plot have read")
 
 # select genes for analysis
-expressed_genes = (anndata.layers['spliced'].A + anndata.layers['unspliced'].A).sum(0) > 1500
+expressed_genes = (anndata.layers['spliced'].A + anndata.layers['unspliced'].A).sum(0) > n_gene 
 expressed_genes = anndata.var_names[expressed_genes]
 
 len(expressed_genes)
 
 sq.gr.spatial_neighbors(
      anndata,
-     n_neighs= 8 #8
+     n_neighs= 8
 )
 
 sq.gr.spatial_autocorr(
@@ -103,31 +105,35 @@ preprocessor.preprocess_adata(anndata, recipe='monocle')
 
 # preprocessor = dyn.pp.Preprocessor(cell_cycle_score_enable=True)
 # preprocessor.preprocess_adata(anndata, recipe='monocle')
-dyn.tl.reduceDimension(anndata, enforce = True) #n_pca_components-30, n_components-2, n_neighbors-30
+dyn.tl.reduceDimension(anndata, enforce = True)
 dyn.pl.umap(anndata, color='celltype',show_legend= 'on data',alpha=1,background='black',pointsize=0.25,figsize=(28, 12), color_key=co) 
 plt.savefig('uamp.svg')
-print("Preprocessor have read!")
+print("Preprocessor have read!!!!!!!")
 
 dyn.tl.dynamics(anndata, cores=10)
-dyn.tl.gene_wise_confidence(anndata, group='celltype',lineage_dict = { root_cell :["Active_HFSC",'ORS_Suprabasal','ORS_basal',"TAC_1","HF_IRS","TAC_2","Medulla_Cortex_Cuticle","IRS_cuticle"]} )
+dyn.tl.gene_wise_confidence(anndata, group='celltype',lineage_dict = { root_cell :["Dermal_sheath","Dermal_papilla"]} )
 
 os.chdir(outpath)
-print("gene_wise_confidence have read!")
+print("gene_wise_confidence have read")
 
 dyn.pl.phase_portraits(anndata, genes=anndata.var_names[anndata.var.use_for_dynamics][:4], figsize=(6, 4), color='celltype')
 plt.savefig('umap_phase_portraits_gene.svg')  
 
+
 dyn.tl.reduceDimension(anndata, enforce = True)
 dyn.tl.cell_velocities(anndata, method="fp", basis='spatial',enforce=True,  transition_genes = list(anndata.var_names[anndata.var.use_for_pca]))
 dyn.tl.cell_wise_confidence(anndata)
-dyn.tl.confident_cell_velocities(anndata, group='celltype', lineage_dict={ root_cell:["Active_HFSC",'ORS_Suprabasal','ORS_basal',"TAC_1","HF_IRS","TAC_2","Medulla_Cortex_Cuticle","IRS_cuticle"]},only_transition_genes=True,basis='spatial')
+dyn.tl.confident_cell_velocities(anndata, group='celltype', lineage_dict={ root_cell:["Dermal_sheath","Dermal_papilla"]},only_transition_genes=True,basis='spatial')
 
-dyn.pl.cell_wise_vectors(anndata, color=['celltype'], basis='spatial', show_legend='on data', quiver_length=12, quiver_size=20, pointsize=0.25, show_arrowed_spines=False,figsize=(28, 12),frontier = True,color_key=co,calpha=1) #background='black'
+
+
+dyn.pl.cell_wise_vectors(anndata, color=['celltype'], basis='spatial', show_legend='on data', quiver_length=12, quiver_size=8, pointsize=0.1, show_arrowed_spines=False,figsize=(28, 12),frontier = True,color_key=co,calpha=1) #background='black'
 plt.savefig('cell_wise_vectors.spatial.svg')
 
 
-dyn.pl.streamline_plot(anndata, color=['celltype'], basis='spatial', show_legend='on data',quiver_length=12, quiver_size=20, pointsize=0.25, color_key=co, show_arrowed_spines=True,background='black',figsize=(28, 12),calpha=1)
+dyn.pl.streamline_plot(anndata, color=['celltype'], basis='spatial', show_legend='on data',quiver_length=12, quiver_size=8, pointsize=0.1, color_key=co, show_arrowed_spines=True,background='black',figsize=(28, 12),calpha=1) 
 plt.savefig('cell_wise_plot.spatial.svg')
+
 
 dyn.vf.VectorField(anndata,
                    basis='spatial',
@@ -172,8 +178,8 @@ dyn.pl.streamline_plot(anndata, color=['celltype','spatial_ddhodge_potential'],
                        show_legend='None',
                        figsize=(28, 12),
                        color_key=co,
-                       #quiver_length=12, quiver_size=40,
-                       pointsize=0.25,
+                       quiver_length=12, quiver_size=20,
+                       pointsize=0.1,
                        background='black',
                        cmap ='viridis',
                        show_arrowed_spines=True,
@@ -187,5 +193,4 @@ dyn.pl.streamline_plot(anndata, color=['celltype','spatial_ddhodge_potential'],
 plt.savefig('ddhodge_potential.celltype.spatial.svg')
 
 dyn.cleanup(anndata)
-anndata.write_h5ad(idname+'_dynamo.h5ad')
-
+anndata.write_h5ad(id+'_dynamo.h5ad')
